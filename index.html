@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJH AI Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col items-center p-4 sm:p-8">
+  <div class="w-full max-w-2xl bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-2xl">
+    
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold tracking-tight text-white">MJH AI Studio</h1>
+      <span class="text-xs bg-indigo-900/50 text-indigo-300 border border-indigo-700/50 px-2 py-1 rounded">T4 GPU Powered</span>
+    </div>
+
+    <!-- Backend URL Configuration -->
+    <div class="mb-4">
+      <label class="block text-xs uppercase text-gray-400 font-semibold mb-1">Cloudflare Endpoint URL</label>
+      <input id="apiUrl" type="text" placeholder="https://your-tunnel-name.trycloudflare.com" 
+        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-sm text-gray-200 focus:outline-none focus:border-indigo-500">
+    </div>
+
+    <!-- Mode Selector -->
+    <div class="grid grid-cols-3 gap-2 mb-4 bg-gray-800/60 p-1.5 rounded-lg border border-gray-700/40">
+      <button onclick="setMode('chat')" id="tab-chat" class="py-2 text-sm font-medium rounded-md bg-indigo-600 text-white transition">Chat</button>
+      <button onclick="setMode('image')" id="tab-image" class="py-2 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Image</button>
+      <button onclick="setMode('video')" id="tab-video" class="py-2 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Video</button>
+    </div>
+
+    <!-- Prompt Box -->
+    <div class="mb-4">
+      <textarea id="promptInput" rows="3" placeholder="Enter your prompt here..." 
+        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-sm text-gray-200 focus:outline-none focus:border-indigo-500"></textarea>
+      <button id="sendBtn" onclick="generate()" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg text-sm transition">
+        Generate
+      </button>
+    </div>
+
+    <!-- Output Display Area -->
+    <div id="outputArea" class="border-t border-gray-800 pt-4 mt-2">
+      <p id="placeholderText" class="text-sm text-gray-500 text-center py-6">Results will appear here...</p>
+      <div id="chatHistory" class="space-y-3 hidden"></div>
+      <div id="mediaContainer" class="hidden flex justify-center"></div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentMode = 'chat';
+
+    function setMode(mode) {
+      currentMode = mode;
+      ['chat', 'image', 'video'].forEach(m => {
+        const btn = document.getElementById(`tab-${m}`);
+        if (m === mode) {
+          btn.className = "py-2 text-sm font-medium rounded-md bg-indigo-600 text-white transition";
+        } else {
+          btn.className = "py-2 text-sm font-medium rounded-md text-gray-400 hover:text-white transition";
+        }
+      });
+      document.getElementById('mediaContainer').classList.add('hidden');
+      document.getElementById('mediaContainer').innerHTML = '';
+      if (mode === 'chat') {
+        document.getElementById('chatHistory').classList.remove('hidden');
+      } else {
+        document.getElementById('chatHistory').classList.add('hidden');
+      }
+    }
+
+    async function generate() {
+      const url = document.getElementById('apiUrl').value.trim();
+      const prompt = document.getElementById('promptInput').value.trim();
+      const btn = document.getElementById('sendBtn');
+      const placeholder = document.getElementById('placeholderText');
+      const chatHistory = document.getElementById('chatHistory');
+      const mediaContainer = document.getElementById('mediaContainer');
+
+      if (!url) return alert('Please enter your Cloudflare backend URL!');
+      if (!prompt) return alert('Please enter a prompt!');
+
+      btn.disabled = true;
+      btn.innerText = 'Processing on T4 GPU...';
+      placeholder.classList.add('hidden');
+
+      try {
+        const endpoint = currentMode === 'chat' ? '/chat' : currentMode === 'image' ? '/image' : '/video';
+        const res = await fetch(`${url}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentMode === 'chat' ? { prompt } : { prompt })
+        });
+
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+        const data = await res.json();
+
+        if (currentMode === 'chat') {
+          chatHistory.classList.remove('hidden');
+          chatHistory.innerHTML += `
+            <div class="bg-gray-800/80 p-3 rounded-lg text-sm border border-gray-700/50">
+              <span class="text-indigo-400 font-semibold block mb-1">You:</span>
+              <p class="text-gray-200">${prompt}</p>
+            </div>
+            <div class="bg-gray-800/30 p-3 rounded-lg text-sm border border-gray-700/30">
+              <span class="text-emerald-400 font-semibold block mb-1">MJH AI:</span>
+              <p class="text-gray-200 whitespace-pre-wrap">${data.reply}</p>
+            </div>`;
+        } else if (currentMode === 'image') {
+          mediaContainer.classList.remove('hidden');
+          mediaContainer.innerHTML = `<img src="${data.image_base64}" class="rounded-lg max-h-96 w-auto border border-gray-700 shadow-md">`;
+        } else if (currentMode === 'video') {
+          mediaContainer.classList.remove('hidden');
+          mediaContainer.innerHTML = `<video src="${data.video_base64}" controls autoplay loop class="rounded-lg max-h-96 w-auto border border-gray-700 shadow-md"></video>`;
+        }
+        document.getElementById('promptInput').value = '';
+      } catch (err) {
+        alert("Request Failed: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Generate';
+      }
+    }
+  </script>
+</body>
+</html>
