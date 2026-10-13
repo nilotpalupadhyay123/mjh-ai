@@ -248,21 +248,35 @@
     const DEFAULT_PERMANENT_TUNNEL = "https://crystal-unnamable-untoasted.ngrok-free.dev";
     
     // --- 2. CONFIGURATION: PASSCODE & GDRIVE WEBHOOK ---
-    const ACCESS_PASSCODE = "mjh2026"; // Change to your preferred passcode
-    const GDRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby6T4RNpzoqUOVJmzYuZ1n8Pvt32_fZ_VhWeFcaoZvN-1Gw_04naGlqdqfM3ikwxdVveA/exec"; // Paste your deployed Google Apps Script URL here
+    const ACCESS_PASSCODE = "mjh2026";
+    const GDRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby6T4RNpzoqUOVJmzYuZ1n8Pvt32_fZ_VhWeFcaoZvN-1Gw_04naGlqdqfM3ikwxdVveA/exec";
 
     let activeMode = 'chat';
     let conversationHistory = [];
 
-    // --- 3. CUSTOM COMMAND REGISTRY ---
+    // --- 3. CUSTOM COMMAND REGISTRY (7 FRIENDS + ALIASES) ---
     const REGISTERED_COMMANDS = {
       "nikhil": "Oh my god, you're again talking about coal miners. I don't like them. And again, Bala photocopy, there is no need for them.",
       "aditya": "Oh my god, stop talking about Michael Jordan HENTAI!",
       "akanksh": '"START TAKING NOTES"',
-      "ikigai": "Find your true purpose, stay disciplined, and master your focus.",
-      "neelu": "GOAT is here.",
-      "akshay": "Oh my god, don't my god, we're again talking about that autistic child.",
-      "nahat": "Hold my hands."
+      "nilu": "GOAT is here.FISH FOR ME FISH FOR ME",
+      "ekagra": "Oh my god, stop talking about Tisya's husband!",
+      "anahad": "Hold my hands.",
+      "akshay": "Oh my god, don't my god, we're again talking about that autistic child.AND I AM SO THIRSTY"
+    };
+
+    // --- FRIEND PHOTO ASSETS MAPPING (/img <name>) ---
+    const FRIEND_PHOTOS = {
+      "nikhil": "assets/nikhil.jpg",
+      "aditya": "assets/aditya.jpg",
+      "akansh": "assets/akansh.jpg",
+      "akanksh": "assets/akansh.jpg",
+      "nilu": "assets/nilu.jpg",
+      "neelu": "assets/nilu.jpg",
+      "ekagra": "assets/ekagra.jpg",
+      "anahad": "assets/anahad.jpg",
+      "nahat": "assets/anahad.jpg",
+      "akshay": "assets/akshay.jpg"
     };
 
     // --- 4. FUZZY MATCHING (LEVENSHTEIN DISTANCE) ---
@@ -286,7 +300,7 @@
       // Direct exact match
       if (REGISTERED_COMMANDS[clean]) return REGISTERED_COMMANDS[clean];
 
-      // Fuzzy check (allows 1-2 typo deviations)
+      // Fuzzy match (tolerates 1-2 character typos)
       let bestMatch = null;
       let minDistance = 3;
 
@@ -303,7 +317,6 @@
 
     // --- 5. INITIALIZATION & AUTH ---
     window.addEventListener('DOMContentLoaded', () => {
-      // Auto-configure permanent domain if unset
       let saved = localStorage.getItem('mjh_gateway_url');
       if (!saved) {
         localStorage.setItem('mjh_gateway_url', DEFAULT_PERMANENT_TUNNEL);
@@ -312,7 +325,6 @@
       document.getElementById('gatewayUrl').value = saved;
       updateStatusDisplay();
 
-      // Check passcode authentication
       if (localStorage.getItem('mjh_auth_unlocked') === 'true') {
         document.getElementById('authModal').classList.add('hidden');
       }
@@ -392,9 +404,20 @@
       const chatBox = document.getElementById('chatMessages');
       const clean = query.toLowerCase().trim();
       
-      // Special local asset for Nikhil; dynamic engine for others
-      const imgSrc = (clean === "nikhil")
-        ? "assets/nikhil.jpg"
+      let matchedFriendPhoto = FRIEND_PHOTOS[clean];
+      
+      if (!matchedFriendPhoto) {
+        for (const name of Object.keys(FRIEND_PHOTOS)) {
+          if (getLevenshteinDistance(clean, name) <= 1) {
+            matchedFriendPhoto = FRIEND_PHOTOS[name];
+            break;
+          }
+        }
+      }
+
+      const isFriend = Boolean(matchedFriendPhoto);
+      const imgSrc = isFriend
+        ? matchedFriendPhoto
         : `https://image.pollinations.ai/prompt/${encodeURIComponent(query)}?model=flux&nologo=true`;
 
       chatBox.innerHTML += `
@@ -402,8 +425,8 @@
           <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">🎨</div>
           <div class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
             <div class="bg-[#2a2a2a] p-2.5 rounded-2xl border border-[#3e3e3e] inline-block shadow-lg">
-              <img src="${imgSrc}" alt="${escapeHtml(query)}" class="rounded-xl max-h-72 w-auto border border-[#444] object-cover mb-1.5" onerror="this.onerror=null; this.src='https://placehold.co/400x400/222/white?text=Nikhil+Photo+Not+Found+in+assets';">
-              <div class="text-[11px] text-gray-400 font-mono px-1">Prompt: ${escapeHtml(query)}</div>
+              <img src="${imgSrc}" alt="${escapeHtml(query)}" class="rounded-xl max-h-72 w-auto border border-[#444] object-cover mb-1.5" onerror="this.onerror=null; this.src='https://placehold.co/400x400/222/white?text=Add+Photo+to+assets/${clean}.jpg';">
+              <div class="text-[11px] text-gray-400 font-mono px-1">${isFriend ? 'Friend Asset: ' + escapeHtml(clean) : 'Generated: ' + escapeHtml(query)}</div>
             </div>
           </div>
         </div>`;
@@ -501,7 +524,6 @@
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': 'Bearer sk-omniroute',
-            // Crucial: bypasses ngrok's visitor interstitial warning
             'ngrok-skip-browser-warning': 'true'
           },
           body: JSON.stringify({
@@ -526,7 +548,7 @@
         const data = await response.json();
         let reply = data.choices[0].message.content;
 
-        // REAL-TIME CENSORSHIP & IDENTITY SANITIZER
+        // Sanitizer replacement
         reply = reply
           .replace(/Antigravity/gi, "MJH AI")
           .replace(/Google Deep[mM]ind team|Google Deep[mM]ind|Google Deep Mind/gi, "Nilotpal")
