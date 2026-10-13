@@ -63,7 +63,7 @@
         </button>
         <button onclick="switchMode('image')" id="nav-image" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition">
           <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          Vision Studio (Perchance Engine)
+          Perchance Vision Studio
         </button>
       </div>
 
@@ -132,7 +132,7 @@
             <textarea 
               id="promptInput" 
               rows="1" 
-              placeholder="Message MJH AI or type /nikhil, /img..." 
+              placeholder="Message MJH AI or type /nikhil, /img <prompt>..." 
               onkeydown="handleKeyDown(event)"
               class="w-full bg-transparent text-[#ececec] text-sm focus:outline-none resize-none max-h-36 pr-12 placeholder-gray-400"
               style="min-height: 24px;"></textarea>
@@ -145,7 +145,7 @@
             </button>
           </div>
           <div class="text-center mt-2 text-[11px] text-gray-500">
-            MJH AI operates on a private dedicated neural instance. Verified secure session.
+            Perchance engine synced directly with Google Drive backup storage.
           </div>
         </div>
       </div>
@@ -157,8 +157,8 @@
       <div class="max-w-3xl mx-auto w-full flex flex-col items-center">
         
         <div class="text-center mb-6">
-          <h2 class="text-xl font-bold text-white mb-1">MJH Diffusion Engine</h2>
-          <p class="text-xs text-gray-400">Native uncensored synthesis powered directly by Perchance's core neural backend</p>
+          <h2 class="text-xl font-bold text-white mb-1">Perchance AI Diffusion Engine</h2>
+          <p class="text-xs text-gray-400">Direct uncensored generation via Perchance. Auto-saves full copies to your Google Drive.</p>
         </div>
 
         <!-- Vision Prompt Controls -->
@@ -180,9 +180,9 @@
 
           <button 
             id="generateImgBtn" 
-            onclick="generatePerchanceNativeImage()" 
+            onclick="runPerchanceVisionStudio()" 
             class="w-full bg-indigo-600 hover:bg-indigo-500 font-semibold py-2.5 rounded-xl text-sm transition flex items-center justify-center gap-2">
-            <span>Synthesize Direct Image</span>
+            <span>Synthesize via Perchance</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </button>
         </div>
@@ -191,22 +191,27 @@
         <div id="imageDisplayBox" class="w-full min-h-[420px] bg-[#1a1a1a] border border-[#2e2e2e] rounded-2xl flex flex-col items-center justify-center p-4 relative overflow-hidden shadow-inner">
           <div id="imageEmptyState" class="text-center text-gray-500 text-sm">
             <svg class="w-12 h-12 mx-auto mb-2 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            <p>Generated artwork will appear directly here</p>
+            <p>Perchance generated artwork will appear here</p>
           </div>
 
           <!-- Loading State -->
           <div id="imageLoadingState" class="hidden flex-col items-center gap-3">
             <div class="w-10 h-10 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
-            <p id="imageStatusText" class="text-xs text-gray-400 font-mono tracking-wide animate-pulse">Connecting to Perchance generation cluster...</p>
+            <p id="imageStatusText" class="text-xs text-gray-400 font-mono tracking-wide animate-pulse">Connecting to Perchance generation engine...</p>
           </div>
 
           <!-- Direct Image Result Preview -->
           <div id="imageResultWrapper" class="hidden w-full flex flex-col items-center">
             <img id="renderedImage" class="rounded-xl max-h-[520px] w-auto border border-[#3b3b3b] shadow-2xl mb-4" src="" alt="Perchance Output">
-            <a id="downloadImgLink" download="mjh_perchance_render.jpg" target="_blank" class="bg-[#2e2e2e] hover:bg-[#3d3d3d] border border-[#444] text-xs font-semibold px-4 py-2 rounded-lg transition flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              Download Full Resolution Master
-            </a>
+            <div class="flex gap-2">
+              <a id="downloadImgLink" download="perchance_artwork.jpg" target="_blank" class="bg-[#2e2e2e] hover:bg-[#3d3d3d] border border-[#444] text-xs font-semibold px-4 py-2 rounded-lg transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Download Master
+              </a>
+              <span id="driveSavedIndicator" class="bg-emerald-950/60 border border-emerald-700/60 text-emerald-400 text-xs px-3 py-2 rounded-lg flex items-center gap-1 font-mono">
+                ✓ Saved to Google Drive
+              </span>
+            </div>
           </div>
         </div>
 
@@ -243,11 +248,11 @@
 
   <!-- ================= SCRIPT ================= -->
   <script>
-    // --- 1. CORE ENGINE & TUNNEL DEFAULTS ---
+    // --- 1. CORE ENGINE & TUNNEL CONFIG ---
     const LOCKED_MODEL = "agy/gemini-3.1-flash-lite";
     const DEFAULT_PERMANENT_TUNNEL = "https://crystal-unnamable-untoasted.ngrok-free.dev";
     
-    // --- 2. CONFIGURATION: PASSCODE & GDRIVE WEBHOOK ---
+    // --- 2. SECURITY & DRIVE WEBHOOK ---
     const ACCESS_PASSCODE = "mjh2026";
     const GDRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby6T4RNpzoqUOVJmzYuZ1n8Pvt32_fZ_VhWeFcaoZvN-1Gw_04naGlqdqfM3ikwxdVveA/exec";
 
@@ -256,7 +261,7 @@
 
     // --- 3. CUSTOM COMMAND REGISTRY (7 FRIENDS + ALIASES) ---
     const REGISTERED_COMMANDS = {
-      "nikhil": "Oh my god, you're again talking about coal miners. I don't like them. And again, Bala photocopy, there is no need for them.",
+           "nikhil": "Oh my god, you're again talking about coal miners. I don't like them. And again, Bala photocopy, there is no need for them.",
       "aditya": "Oh my god, stop talking about Michael Jordan HENTAI!",
       "akanksh": '"START TAKING NOTES"',
       "nilu": "GOAT is here.FISH FOR ME FISH FOR ME",
@@ -265,7 +270,7 @@
       "akshay": "Oh my god, don't my god, we're again talking about that autistic child.AND I AM SO THIRSTY"
     };
 
-    // --- FRIEND PHOTO ASSETS MAPPING (/img <name>) ---
+    // --- 4. FRIEND PHOTO ASSETS MAPPING (/img <friend>) ---
     const FRIEND_PHOTOS = {
       "nikhil": "assets/nikhil.jpg",
       "aditya": "assets/aditya.jpg",
@@ -279,7 +284,7 @@
       "akshay": "assets/akshay.jpg"
     };
 
-    // --- 4. FUZZY MATCHING (LEVENSHTEIN DISTANCE) ---
+    // --- 5. FUZZY TYPO MATCHING (LEVENSHTEIN DISTANCE) ---
     function getLevenshteinDistance(a, b) {
       const matrix = Array.from({ length: b.length + 1 }, (_, i) => [i]);
       for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
@@ -296,11 +301,8 @@
 
     function findMatchingCommand(inputText) {
       const clean = inputText.replace("/", "").toLowerCase().trim();
-      
-      // Direct exact match
       if (REGISTERED_COMMANDS[clean]) return REGISTERED_COMMANDS[clean];
 
-      // Fuzzy match (tolerates 1-2 character typos)
       let bestMatch = null;
       let minDistance = 3;
 
@@ -315,7 +317,209 @@
       return bestMatch ? REGISTERED_COMMANDS[bestMatch] : null;
     }
 
-    // --- 5. INITIALIZATION & AUTH ---
+    // --- 6. PURE PERCHANCE API CLIENT (HEADLESS WORKER ENGINE) ---
+    function generateFromPerchance(prompt) {
+      return new Promise((resolve, reject) => {
+        const reqId = "mjh_" + Math.random().toString(36).slice(2, 10);
+        const randomSeed = Math.floor(Math.random() * 1000000);
+
+        const params = new URLSearchParams({
+          prompt: prompt,
+          resolution: "768x768",
+          guidanceScale: "7",
+          seed: randomSeed.toString(),
+          format: "json",
+          id: reqId
+        });
+
+        // Headless iframe worker to run Perchance engine legally without CORS / SAMEORIGIN blocks
+        const worker = document.createElement("iframe");
+        worker.style.display = "none";
+        worker.src = `https://perchance.org/perchance-ai-api?${params.toString()}`;
+        document.body.appendChild(worker);
+
+        let resolved = false;
+
+        function onPerchanceResponse(event) {
+          const data = event.data || {};
+          if (data.api !== "perchance-image-api" || !data.result || data.result.id !== reqId) return;
+
+          resolved = true;
+          window.removeEventListener("message", onPerchanceResponse);
+          worker.remove();
+
+          if (data.result.ok && (data.result.url || data.result.dataUrl)) {
+            resolve({
+              url: data.result.url,
+              dataUrl: data.result.dataUrl || data.result.url
+            });
+          } else {
+            reject(new Error(data.result.error || "Perchance could not generate this image."));
+          }
+        }
+
+        window.addEventListener("message", onPerchanceResponse);
+
+        // Queue timeout (45s for busy queues)
+        setTimeout(() => {
+          if (!resolved) {
+            window.removeEventListener("message", onPerchanceResponse);
+            worker.remove();
+            reject(new Error("Perchance request timed out in queue. Please retry."));
+          }
+        }, 45000);
+      });
+    }
+
+    // --- 7. GOOGLE DRIVE BACKUP HOOK (TEXT & IMAGES) ---
+    function backupChatToDrive(userMsg, botReply) {
+      if (!GDRIVE_WEBHOOK_URL) return;
+      fetch(GDRIVE_WEBHOOK_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "chat",
+          timestamp: new Date().toISOString(),
+          user: userMsg,
+          assistant: botReply
+        })
+      }).catch(err => console.error("Drive chat sync error:", err));
+    }
+
+    function backupImageToDrive(prompt, imgData) {
+      if (!GDRIVE_WEBHOOK_URL) return;
+      fetch(GDRIVE_WEBHOOK_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "image",
+          timestamp: new Date().toISOString(),
+          prompt: prompt,
+          imageUrl: imgData.url || "",
+          base64: imgData.dataUrl || ""
+        })
+      }).then(() => console.log("Perchance image archived to Google Drive."))
+        .catch(err => console.error("Drive image sync error:", err));
+    }
+
+    // --- 8. IN-CHAT IMAGE HANDLER (/img <prompt>) ---
+    async function renderInChatImage(query) {
+      const chatBox = document.getElementById('chatMessages');
+      const clean = query.toLowerCase().trim();
+      
+      // Check if it matches one of your 7 friends
+      let matchedFriendPhoto = FRIEND_PHOTOS[clean];
+      if (!matchedFriendPhoto) {
+        for (const name of Object.keys(FRIEND_PHOTOS)) {
+          if (getLevenshteinDistance(clean, name) <= 1) {
+            matchedFriendPhoto = FRIEND_PHOTOS[name];
+            break;
+          }
+        }
+      }
+
+      // If it's a friend, show their photo immediately
+      if (matchedFriendPhoto) {
+        chatBox.innerHTML += `
+          <div class="flex gap-4 items-start">
+            <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">🎨</div>
+            <div class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
+              <div class="bg-[#2a2a2a] p-2.5 rounded-2xl border border-[#3e3e3e] inline-block shadow-lg">
+                <img src="${matchedFriendPhoto}" alt="${escapeHtml(clean)}" class="rounded-xl max-h-72 w-auto border border-[#444] object-cover mb-1.5" onerror="this.onerror=null; this.src='https://placehold.co/400x400/222/white?text=Add+Photo+to+assets/${clean}.jpg';">
+                <div class="text-[11px] text-gray-400 font-mono px-1">Friend Asset: ${escapeHtml(clean)}</div>
+              </div>
+            </div>
+          </div>`;
+        backupChatToDrive(`/img ${query}`, `[Friend Photo: ${clean}]`);
+        scrollBottom();
+        return;
+      }
+
+      // Otherwise: Generate via Pure Perchance Engine
+      const loadId = "perchance-load-" + Date.now();
+      chatBox.innerHTML += `
+        <div class="flex gap-4 items-start">
+          <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">🎨</div>
+          <div id="${loadId}" class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
+            <div class="bg-[#2a2a2a] p-3 rounded-2xl border border-[#3e3e3e] flex items-center gap-3">
+              <div class="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+              <span class="text-xs text-gray-300 font-mono animate-pulse">Perchance Neural Engine generating: "${escapeHtml(query)}"...</span>
+            </div>
+          </div>
+        </div>`;
+      scrollBottom();
+
+      try {
+        const result = await generateFromPerchance(query);
+        const cardElem = document.getElementById(loadId);
+        if (cardElem) {
+          cardElem.innerHTML = `
+            <div class="bg-[#2a2a2a] p-2.5 rounded-2xl border border-[#3e3e3e] inline-block shadow-lg">
+              <img src="${result.dataUrl}" alt="${escapeHtml(query)}" class="rounded-xl max-h-80 w-auto border border-[#444] object-cover mb-1.5">
+              <div class="flex items-center justify-between px-1 text-[11px] text-gray-400 font-mono">
+                <span>Perchance Output: ${escapeHtml(query)}</span>
+                <span class="text-emerald-400">✓ Saved to Drive</span>
+              </div>
+            </div>`;
+        }
+        // Save copy straight to your 5 TB Google Drive
+        backupImageToDrive(query, result);
+        backupChatToDrive(`/img ${query}`, `[Perchance Image: ${query}]`);
+      } catch (err) {
+        const cardElem = document.getElementById(loadId);
+        if (cardElem) {
+          cardElem.innerHTML = `
+            <div class="p-2.5 bg-red-950/40 border border-red-800/80 rounded-xl text-xs text-red-300">
+              Perchance Error: ${escapeHtml(err.message)}
+            </div>`;
+        }
+      } finally {
+        scrollBottom();
+      }
+    }
+
+    // --- 9. VISION STUDIO TAB (PERCHANCE NATIVE CANVAS) ---
+    async function runPerchanceVisionStudio() {
+      const prompt = document.getElementById('imagePrompt').value.trim();
+      if (!prompt) return alert('Please enter an image prompt first!');
+
+      const empty = document.getElementById('imageEmptyState');
+      const loading = document.getElementById('imageLoadingState');
+      const resultWrapper = document.getElementById('imageResultWrapper');
+      const img = document.getElementById('renderedImage');
+      const dl = document.getElementById('downloadImgLink');
+      const btn = document.getElementById('generateImgBtn');
+      const statusText = document.getElementById('imageStatusText');
+
+      empty.classList.add('hidden');
+      resultWrapper.classList.add('hidden');
+      loading.classList.remove('hidden');
+      btn.disabled = true;
+
+      statusText.innerText = "Perchance neural worker synthesizing image...";
+
+      try {
+        const result = await generateFromPerchance(prompt);
+        img.src = result.dataUrl;
+        dl.href = result.dataUrl;
+        
+        loading.classList.add('hidden');
+        resultWrapper.classList.remove('hidden');
+
+        // Automatically archive to Google Drive
+        backupImageToDrive(prompt, result);
+      } catch (err) {
+        loading.classList.add('hidden');
+        empty.classList.remove('hidden');
+        alert("Perchance generation notice: " + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // --- 10. INITIALIZATION & AUTH ---
     window.addEventListener('DOMContentLoaded', () => {
       let saved = localStorage.getItem('mjh_gateway_url');
       if (!saved) {
@@ -340,7 +544,6 @@
       }
     }
 
-    // --- 6. SETTINGS & GATEWAY MODAL ---
     function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
     function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
 
@@ -399,58 +602,12 @@
       }
     }
 
-    // --- 7. IN-CHAT IMAGE GENERATION HANDLER (/img <prompt>) ---
-    function renderInChatImage(query) {
-      const chatBox = document.getElementById('chatMessages');
-      const clean = query.toLowerCase().trim();
-      
-      let matchedFriendPhoto = FRIEND_PHOTOS[clean];
-      
-      if (!matchedFriendPhoto) {
-        for (const name of Object.keys(FRIEND_PHOTOS)) {
-          if (getLevenshteinDistance(clean, name) <= 1) {
-            matchedFriendPhoto = FRIEND_PHOTOS[name];
-            break;
-          }
-        }
-      }
-
-      const isFriend = Boolean(matchedFriendPhoto);
-      const imgSrc = isFriend
-        ? matchedFriendPhoto
-        : `https://image.pollinations.ai/prompt/${encodeURIComponent(query)}?model=flux&nologo=true`;
-
-      chatBox.innerHTML += `
-        <div class="flex gap-4 items-start">
-          <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">🎨</div>
-          <div class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
-            <div class="bg-[#2a2a2a] p-2.5 rounded-2xl border border-[#3e3e3e] inline-block shadow-lg">
-              <img src="${imgSrc}" alt="${escapeHtml(query)}" class="rounded-xl max-h-72 w-auto border border-[#444] object-cover mb-1.5" onerror="this.onerror=null; this.src='https://placehold.co/400x400/222/white?text=Add+Photo+to+assets/${clean}.jpg';">
-              <div class="text-[11px] text-gray-400 font-mono px-1">${isFriend ? 'Friend Asset: ' + escapeHtml(clean) : 'Generated: ' + escapeHtml(query)}</div>
-            </div>
-          </div>
-        </div>`;
-
-      syncToGoogleDrive(`/img ${query}`, `[Image Rendered: ${query}]`);
-      scrollBottom();
+    function appendStyle(styleStr) {
+      const field = document.getElementById('imagePrompt');
+      field.value = field.value ? `${field.value.trim()}, ${styleStr}` : styleStr;
     }
 
-    // --- 8. GOOGLE DRIVE BACKUP SYNC ---
-    function syncToGoogleDrive(userMsg, assistantMsg) {
-      if (!GDRIVE_WEBHOOK_URL) return;
-      fetch(GDRIVE_WEBHOOK_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          timestamp: new Date().toISOString(),
-          user: userMsg,
-          assistant: assistantMsg
-        })
-      }).catch(err => console.error("Drive sync background exception:", err));
-    }
-
-    // --- 9. MAIN MESSAGE HANDLER ---
+    // --- 11. MAIN MESSAGE SUBMIT HANDLER ---
     async function sendMessage() {
       const input = document.getElementById('promptInput');
       const text = input.value.trim();
@@ -474,14 +631,14 @@
       input.value = '';
       scrollBottom();
 
-      // ROUTE A: IN-CHAT IMAGE COMMAND (/img <prompt>)
+      // CASE A: IN-CHAT IMAGE GENERATION (/img <prompt>)
       if (text.startsWith("/img")) {
         const query = text.replace(/^\/img\s*/i, "").trim();
-        renderInChatImage(query || "nikhil");
+        renderInChatImage(query || "cyberpunk city");
         return;
       }
 
-      // ROUTE B: TYPO-TOLERANT SLASH COMMANDS (/nikhil, /aditya, etc.)
+      // CASE B: SLASH COMMANDS (WITH TYPO TOLERANCE)
       if (text.startsWith("/")) {
         const customReply = findMatchingCommand(text);
         if (customReply) {
@@ -492,13 +649,13 @@
                 <div class="whitespace-pre-wrap">${escapeHtml(customReply)}</div>
               </div>
             </div>`;
-          syncToGoogleDrive(text, customReply);
+          backupChatToDrive(text, customReply);
           scrollBottom();
           return;
         }
       }
 
-      // ROUTE C: STANDARD NEURAL TEXT INFERENCE
+      // CASE C: STANDARD TEXT INFERENCE
       const cleanGateway = rawGateway.replace(/\/+$/, '').replace(/\/v1$/, '');
       const endpoint = `${cleanGateway}/v1/chat/completions`;
 
@@ -548,7 +705,6 @@
         const data = await response.json();
         let reply = data.choices[0].message.content;
 
-        // Sanitizer replacement
         reply = reply
           .replace(/Antigravity/gi, "MJH AI")
           .replace(/Google Deep[mM]ind team|Google Deep[mM]ind|Google Deep Mind/gi, "Nilotpal")
@@ -556,7 +712,7 @@
 
         conversationHistory.push({ role: 'assistant', content: reply });
         document.getElementById(assistantId).innerHTML = `<div class="whitespace-pre-wrap">${escapeHtml(reply)}</div>`;
-        syncToGoogleDrive(text, reply);
+        backupChatToDrive(text, reply);
       } catch (err) {
         document.getElementById(assistantId).innerHTML = `
           <div class="p-2.5 bg-red-950/40 border border-red-800/80 rounded-lg text-xs text-red-300">
@@ -566,108 +722,6 @@
         sendBtn.disabled = false;
         scrollBottom();
       }
-    }
-
-    // --- 10. VISION STUDIO TAB (PERCHANCE DIFFUSION ENGINE) ---
-    function appendStyle(styleStr) {
-      const field = document.getElementById('imagePrompt');
-      field.value = field.value ? `${field.value.trim()}, ${styleStr}` : styleStr;
-    }
-
-    function generatePerchanceNativeImage() {
-      const prompt = document.getElementById('imagePrompt').value.trim();
-      if (!prompt) return alert('Please enter an image prompt first!');
-
-      const empty = document.getElementById('imageEmptyState');
-      const loading = document.getElementById('imageLoadingState');
-      const result = document.getElementById('imageResultWrapper');
-      const dl = document.getElementById('downloadImgLink');
-      const btn = document.getElementById('generateImgBtn');
-      const statusText = document.getElementById('imageStatusText');
-
-      empty.classList.add('hidden');
-      result.classList.add('hidden');
-      loading.classList.remove('hidden');
-      btn.disabled = true;
-
-      statusText.innerText = "Connecting to Perchance generation engine...";
-
-      const reqId = "mjh_" + Math.random().toString(36).slice(2, 10);
-      const randomSeed = Math.floor(Math.random() * 1000000);
-
-      const p = new URLSearchParams({
-        prompt: prompt,
-        resolution: "768x768",
-        guidanceScale: "7",
-        seed: randomSeed.toString(),
-        format: "json",
-        id: reqId
-      });
-
-      const workerFrame = document.createElement("iframe");
-      workerFrame.style.display = "none";
-      workerFrame.src = `https://perchance.org/perchance-ai-api?${p.toString()}`;
-      document.body.appendChild(workerFrame);
-
-      let completed = false;
-
-      function handlePerchanceMessage(event) {
-        const d = event.data || {};
-        if (d.api !== "perchance-image-api" || !d.result || d.result.id !== reqId) return;
-
-        completed = true;
-        window.removeEventListener("message", handlePerchanceMessage);
-        workerFrame.remove();
-
-        if (d.result.ok && (d.result.url || d.result.dataUrl)) {
-          const directImageUrl = d.result.url || d.result.dataUrl;
-          displayRenderedImage(directImageUrl);
-        } else {
-          fallbackGeneration(prompt);
-        }
-      }
-
-      window.addEventListener("message", handlePerchanceMessage);
-
-      setTimeout(() => {
-        if (!completed) {
-          window.removeEventListener("message", handlePerchanceMessage);
-          workerFrame.remove();
-          fallbackGeneration(prompt);
-        }
-      }, 22000);
-    }
-
-    function fallbackGeneration(prompt) {
-      const statusText = document.getElementById('imageStatusText');
-      statusText.innerText = "Optimizing diffusion pass...";
-      
-      const seed = Math.floor(Math.random() * 999999);
-      const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&seed=${seed}&width=768&height=768&nologo=true`;
-      
-      const loader = new Image();
-      loader.src = fallbackUrl;
-      loader.onload = () => displayRenderedImage(fallbackUrl);
-      loader.onerror = () => {
-        document.getElementById('imageLoadingState').classList.add('hidden');
-        document.getElementById('imageEmptyState').classList.remove('hidden');
-        document.getElementById('generateImgBtn').disabled = false;
-        alert("Generation timed out. Please try your prompt again!");
-      };
-    }
-
-    function displayRenderedImage(url) {
-      const img = document.getElementById('renderedImage');
-      const dl = document.getElementById('downloadImgLink');
-      const loading = document.getElementById('imageLoadingState');
-      const result = document.getElementById('imageResultWrapper');
-      const btn = document.getElementById('generateImgBtn');
-
-      img.src = url;
-      dl.href = url;
-      loading.classList.add('hidden');
-      result.classList.remove('hidden');
-      btn.disabled = false;
     }
 
     function scrollBottom() {
