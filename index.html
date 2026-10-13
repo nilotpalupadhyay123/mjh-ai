@@ -63,13 +63,16 @@
         </button>
         <button onclick="switchMode('image')" id="nav-image" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition">
           <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          Perchance Vision Studio
+          Perchance Studio
         </button>
       </div>
 
-      <div class="text-[11px] font-semibold tracking-wider text-gray-500 uppercase px-2 mb-2">Recent Sessions</div>
-      <div id="sessionHistory" class="flex-grow overflow-y-auto space-y-1 text-sm text-gray-300">
-        <div class="px-3 py-2 rounded-lg text-xs text-gray-500 italic">No previous chats yet</div>
+      <div class="text-[11px] font-semibold tracking-wider text-gray-500 uppercase px-2 mb-2">Friend Shortcuts</div>
+      <div class="px-2 py-1 text-xs text-gray-400 space-y-1">
+        <div>/nikhil &bull; /aditya &bull; /akansh</div>
+        <div>/nilu &bull; /ekagra &bull; /anahad &bull; /aksh
+ay</div>
+        <div class="text-[10px] text-gray-500 pt-1">Photos: <code>/img name</code></div>
       </div>
 
       <!-- Settings / Cluster Status -->
@@ -120,7 +123,7 @@
           <div id="greetingContainer" class="flex flex-col items-center justify-center min-h-[50vh] text-center">
             <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow mb-4">M</div>
             <h2 class="text-xl font-semibold text-white mb-2">Welcome to MJH AI</h2>
-            <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Running with uncensored tensor weights on a private dedicated node.</p>
+            <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Type any message or friend slash command (/nikhil, /aditya, /img nikhil...).</p>
           </div>
         </div>
       </div>
@@ -132,7 +135,7 @@
             <textarea 
               id="promptInput" 
               rows="1" 
-              placeholder="Message MJH AI or type /nikhil, /img <prompt>..." 
+              placeholder="Message MJH AI or type /nikhil, /img nikhil..." 
               onkeydown="handleKeyDown(event)"
               class="w-full bg-transparent text-[#ececec] text-sm focus:outline-none resize-none max-h-36 pr-12 placeholder-gray-400"
               style="min-height: 24px;"></textarea>
@@ -145,77 +148,39 @@
             </button>
           </div>
           <div class="text-center mt-2 text-[11px] text-gray-500">
-            Perchance engine synced directly with Google Drive backup storage.
+            For free unlimited AI image creation, open the Perchance Studio tab.
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- TAB 2: DIRECT NATIVE PERCHANCE CANVAS -->
-    <div id="view-image" class="hidden flex-grow flex flex-col h-[calc(100vh-3rem)] overflow-y-auto p-4 sm:p-8">
-      <div class="max-w-3xl mx-auto w-full flex flex-col items-center">
-        
-        <div class="text-center mb-6">
-          <h2 class="text-xl font-bold text-white mb-1">Perchance AI Diffusion Engine</h2>
-          <p class="text-xs text-gray-400">Direct uncensored generation via Perchance. Auto-saves full copies to your Google Drive.</p>
+    <!-- TAB 2: EMBEDDED DIRECT PERCHANCE PORTAL -->
+    <div id="view-image" class="hidden flex-grow flex flex-col h-[calc(100vh-3rem)] overflow-hidden bg-[#181818]">
+      
+      <!-- Studio Control Bar -->
+      <div class="h-10 border-b border-[#2d2d2d] bg-[#1e1e1e] flex items-center justify-between px-4 shrink-0">
+        <div class="flex items-center gap-2 text-xs text-gray-300">
+          <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+          <span class="font-semibold">Perchance Engine (Direct Portal)</span>
         </div>
-
-        <!-- Vision Prompt Controls -->
-        <div class="w-full bg-[#2a2a2a] border border-[#3a3a3a] rounded-2xl p-4 shadow-xl mb-6">
-          <label class="block text-xs uppercase font-bold text-gray-400 mb-2 tracking-wider">Image Prompt</label>
-          <textarea 
-            id="imagePrompt" 
-            rows="3" 
-            placeholder="scottish woman, late 20s, red curls, wearing a plaid shawl, on a lonely moor, 8k cinematic..." 
-            class="w-full bg-[#1e1e1e] border border-[#3a3a3a] focus:border-indigo-500 rounded-xl p-3 text-sm text-gray-200 focus:outline-none resize-none mb-3"></textarea>
-          
-          <div class="flex flex-wrap gap-1.5 mb-4 text-xs">
-            <span class="text-gray-400 self-center mr-1">Styles:</span>
-            <button onclick="appendStyle('photorealistic, 8k, cinematic lighting')" class="bg-[#1f1f1f] hover:bg-[#333] border border-[#3e3e3e] px-2.5 py-1 rounded-lg text-gray-300">Photoreal</button>
-            <button onclick="appendStyle('painted anime, vibrant, detailed illustration')" class="bg-[#1f1f1f] hover:bg-[#333] border border-[#3e3e3e] px-2.5 py-1 rounded-lg text-gray-300">Painted Anime</button>
-            <button onclick="appendStyle('cyberpunk city, neon lighting, dark aesthetic')" class="bg-[#1f1f1f] hover:bg-[#333] border border-[#3e3e3e] px-2.5 py-1 rounded-lg text-gray-300">Cyberpunk</button>
-            <button onclick="appendStyle('fantasy oil painting, unreal engine 5')" class="bg-[#1f1f1f] hover:bg-[#333] border border-[#3e3e3e] px-2.5 py-1 rounded-lg text-gray-300">Fantasy</button>
-          </div>
-
-          <button 
-            id="generateImgBtn" 
-            onclick="runPerchanceVisionStudio()" 
-            class="w-full bg-indigo-600 hover:bg-indigo-500 font-semibold py-2.5 rounded-xl text-sm transition flex items-center justify-center gap-2">
-            <span>Synthesize via Perchance</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <div class="flex items-center gap-2">
+          <button onclick="reloadPerchanceFrame()" class="text-xs bg-[#2c2c2c] hover:bg-[#3a3a3a] text-gray-300 px-2.5 py-1 rounded border border-[#3e3e3e] transition">
+            ⟳ Reload Studio
           </button>
         </div>
-
-        <!-- Canvas Output Area -->
-        <div id="imageDisplayBox" class="w-full min-h-[420px] bg-[#1a1a1a] border border-[#2e2e2e] rounded-2xl flex flex-col items-center justify-center p-4 relative overflow-hidden shadow-inner">
-          <div id="imageEmptyState" class="text-center text-gray-500 text-sm">
-            <svg class="w-12 h-12 mx-auto mb-2 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            <p>Perchance generated artwork will appear here</p>
-          </div>
-
-          <!-- Loading State -->
-          <div id="imageLoadingState" class="hidden flex-col items-center gap-3">
-            <div class="w-10 h-10 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
-            <p id="imageStatusText" class="text-xs text-gray-400 font-mono tracking-wide animate-pulse">Connecting to Perchance generation engine...</p>
-          </div>
-
-          <!-- Direct Image Result Preview -->
-          <div id="imageResultWrapper" class="hidden w-full flex flex-col items-center">
-            <img id="renderedImage" class="rounded-xl max-h-[520px] w-auto border border-[#3b3b3b] shadow-2xl mb-4" src="" alt="Perchance Output">
-            <div class="flex gap-2">
-              <a id="downloadImgLink" download="perchance_artwork.jpg" target="_blank" class="bg-[#2e2e2e] hover:bg-[#3d3d3d] border border-[#444] text-xs font-semibold px-4 py-2 rounded-lg transition flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                Download Master
-              </a>
-              <span id="driveSavedIndicator" class="bg-emerald-950/60 border border-emerald-700/60 text-emerald-400 text-xs px-3 py-2 rounded-lg flex items-center gap-1 font-mono">
-                ✓ Saved to Google Drive
-              </span>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Native null.perchance.org Frame (Bypasses SAMEORIGIN & CSP) -->
+      <div class="flex-grow w-full h-full relative bg-[#181818]">
+        <iframe 
+          id="perchanceFrame"
+          src="https://null.perchance.org/ai-text-to-image-generator" 
+          class="w-full h-full border-none"
+          allow="clipboard-write; fullscreen">
+        </iframe>
+      </div>
+
     </div>
 
   </main>
@@ -252,16 +217,16 @@
     const LOCKED_MODEL = "agy/gemini-3.1-flash-lite";
     const DEFAULT_PERMANENT_TUNNEL = "https://crystal-unnamable-untoasted.ngrok-free.dev";
     
-    // --- 2. SECURITY & DRIVE WEBHOOK ---
+    // --- 2. CONFIGURATION: PASSCODE & GDRIVE WEBHOOK ---
     const ACCESS_PASSCODE = "mjh2026";
     const GDRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby6T4RNpzoqUOVJmzYuZ1n8Pvt32_fZ_VhWeFcaoZvN-1Gw_04naGlqdqfM3ikwxdVveA/exec";
 
     let activeMode = 'chat';
     let conversationHistory = [];
 
-    // --- 3. CUSTOM COMMAND REGISTRY (7 FRIENDS + ALIASES) ---
+    // --- 3. CUSTOM COMMAND REGISTRY (7 FRIENDS) ---
     const REGISTERED_COMMANDS = {
-           "nikhil": "Oh my god, you're again talking about coal miners. I don't like them. And again, Bala photocopy, there is no need for them.",
+            "nikhil": "Oh my god, you're again talking about coal miners. I don't like them. And again, Bala photocopy, there is no need for them.",
       "aditya": "Oh my god, stop talking about Michael Jordan HENTAI!",
       "akanksh": '"START TAKING NOTES"',
       "nilu": "GOAT is here.FISH FOR ME FISH FOR ME",
@@ -317,61 +282,7 @@
       return bestMatch ? REGISTERED_COMMANDS[bestMatch] : null;
     }
 
-    // --- 6. PURE PERCHANCE API CLIENT (HEADLESS WORKER ENGINE) ---
-    function generateFromPerchance(prompt) {
-      return new Promise((resolve, reject) => {
-        const reqId = "mjh_" + Math.random().toString(36).slice(2, 10);
-        const randomSeed = Math.floor(Math.random() * 1000000);
-
-        const params = new URLSearchParams({
-          prompt: prompt,
-          resolution: "768x768",
-          guidanceScale: "7",
-          seed: randomSeed.toString(),
-          format: "json",
-          id: reqId
-        });
-
-        // Headless iframe worker to run Perchance engine legally without CORS / SAMEORIGIN blocks
-        const worker = document.createElement("iframe");
-        worker.style.display = "none";
-        worker.src = `https://perchance.org/perchance-ai-api?${params.toString()}`;
-        document.body.appendChild(worker);
-
-        let resolved = false;
-
-        function onPerchanceResponse(event) {
-          const data = event.data || {};
-          if (data.api !== "perchance-image-api" || !data.result || data.result.id !== reqId) return;
-
-          resolved = true;
-          window.removeEventListener("message", onPerchanceResponse);
-          worker.remove();
-
-          if (data.result.ok && (data.result.url || data.result.dataUrl)) {
-            resolve({
-              url: data.result.url,
-              dataUrl: data.result.dataUrl || data.result.url
-            });
-          } else {
-            reject(new Error(data.result.error || "Perchance could not generate this image."));
-          }
-        }
-
-        window.addEventListener("message", onPerchanceResponse);
-
-        // Queue timeout (45s for busy queues)
-        setTimeout(() => {
-          if (!resolved) {
-            window.removeEventListener("message", onPerchanceResponse);
-            worker.remove();
-            reject(new Error("Perchance request timed out in queue. Please retry."));
-          }
-        }, 45000);
-      });
-    }
-
-    // --- 7. GOOGLE DRIVE BACKUP HOOK (TEXT & IMAGES) ---
+    // --- 6. GOOGLE DRIVE BACKUP SYNC ---
     function backupChatToDrive(userMsg, botReply) {
       if (!GDRIVE_WEBHOOK_URL) return;
       fetch(GDRIVE_WEBHOOK_URL, {
@@ -384,142 +295,66 @@
           user: userMsg,
           assistant: botReply
         })
-      }).catch(err => console.error("Drive chat sync error:", err));
+      }).catch(err => console.error("Drive sync error:", err));
     }
 
-    function backupImageToDrive(prompt, imgData) {
-      if (!GDRIVE_WEBHOOK_URL) return;
-      fetch(GDRIVE_WEBHOOK_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "image",
-          timestamp: new Date().toISOString(),
-          prompt: prompt,
-          imageUrl: imgData.url || "",
-          base64: imgData.dataUrl || ""
-        })
-      }).then(() => console.log("Perchance image archived to Google Drive."))
-        .catch(err => console.error("Drive image sync error:", err));
-    }
-
-    // --- 8. IN-CHAT IMAGE HANDLER (/img <prompt>) ---
-    async function renderInChatImage(query) {
+    // --- 7. IN-CHAT STORED PHOTO HANDLER (/img <friend>) ---
+    function handleInChatFriendImage(query) {
       const chatBox = document.getElementById('chatMessages');
       const clean = query.toLowerCase().trim();
       
-      // Check if it matches one of your 7 friends
-      let matchedFriendPhoto = FRIEND_PHOTOS[clean];
-      if (!matchedFriendPhoto) {
+      // Match friend name (with typo tolerance)
+      let matchedName = clean;
+      let matchedPhoto = FRIEND_PHOTOS[clean];
+
+      if (!matchedPhoto) {
         for (const name of Object.keys(FRIEND_PHOTOS)) {
           if (getLevenshteinDistance(clean, name) <= 1) {
-            matchedFriendPhoto = FRIEND_PHOTOS[name];
+            matchedPhoto = FRIEND_PHOTOS[name];
+            matchedName = name;
             break;
           }
         }
       }
 
-      // If it's a friend, show their photo immediately
-      if (matchedFriendPhoto) {
+      // Case A: A recognized friend name
+      if (matchedPhoto) {
         chatBox.innerHTML += `
           <div class="flex gap-4 items-start">
-            <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">🎨</div>
+            <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">📷</div>
             <div class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
               <div class="bg-[#2a2a2a] p-2.5 rounded-2xl border border-[#3e3e3e] inline-block shadow-lg">
-                <img src="${matchedFriendPhoto}" alt="${escapeHtml(clean)}" class="rounded-xl max-h-72 w-auto border border-[#444] object-cover mb-1.5" onerror="this.onerror=null; this.src='https://placehold.co/400x400/222/white?text=Add+Photo+to+assets/${clean}.jpg';">
-                <div class="text-[11px] text-gray-400 font-mono px-1">Friend Asset: ${escapeHtml(clean)}</div>
+                <img src="${matchedPhoto}" alt="${escapeHtml(matchedName)}" 
+                     class="rounded-xl max-h-72 w-auto border border-[#444] object-cover mb-1.5" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x400/222/white?text=Ensure+assets/${escapeHtml(matchedName)}.jpg+is+on+GitHub';">
+                <div class="text-[11px] text-gray-400 font-mono px-1">Friend Asset: ${escapeHtml(matchedName)}</div>
               </div>
             </div>
           </div>`;
-        backupChatToDrive(`/img ${query}`, `[Friend Photo: ${clean}]`);
-        scrollBottom();
-        return;
-      }
-
-      // Otherwise: Generate via Pure Perchance Engine
-      const loadId = "perchance-load-" + Date.now();
-      chatBox.innerHTML += `
-        <div class="flex gap-4 items-start">
-          <div class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">🎨</div>
-          <div id="${loadId}" class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
-            <div class="bg-[#2a2a2a] p-3 rounded-2xl border border-[#3e3e3e] flex items-center gap-3">
-              <div class="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
-              <span class="text-xs text-gray-300 font-mono animate-pulse">Perchance Neural Engine generating: "${escapeHtml(query)}"...</span>
-            </div>
-          </div>
-        </div>`;
-      scrollBottom();
-
-      try {
-        const result = await generateFromPerchance(query);
-        const cardElem = document.getElementById(loadId);
-        if (cardElem) {
-          cardElem.innerHTML = `
-            <div class="bg-[#2a2a2a] p-2.5 rounded-2xl border border-[#3e3e3e] inline-block shadow-lg">
-              <img src="${result.dataUrl}" alt="${escapeHtml(query)}" class="rounded-xl max-h-80 w-auto border border-[#444] object-cover mb-1.5">
-              <div class="flex items-center justify-between px-1 text-[11px] text-gray-400 font-mono">
-                <span>Perchance Output: ${escapeHtml(query)}</span>
-                <span class="text-emerald-400">✓ Saved to Drive</span>
+        backupChatToDrive(`/img ${query}`, `[Stored Photo Displayed: ${matchedName}]`);
+      } else {
+        // Case B: User typed a random prompt into chat
+        chatBox.innerHTML += `
+          <div class="flex gap-4 items-start">
+            <div class="w-7 h-7 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">ℹ️</div>
+            <div class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
+              <div class="bg-[#2a2a2a] p-3 rounded-2xl border border-amber-800/60 text-xs text-amber-200 space-y-1">
+                <p><b>Notice:</b> In-chat <code>/img</code> only displays stored friend photos (e.g. <code>/img nikhil</code>, <code>/img aditya</code>, <code>/img ekagra</code>).</p>
+                <p class="text-gray-400">To generate any custom AI artwork, click <b>Perchance Studio</b> in the sidebar!</p>
               </div>
-            </div>`;
-        }
-        // Save copy straight to your 5 TB Google Drive
-        backupImageToDrive(query, result);
-        backupChatToDrive(`/img ${query}`, `[Perchance Image: ${query}]`);
-      } catch (err) {
-        const cardElem = document.getElementById(loadId);
-        if (cardElem) {
-          cardElem.innerHTML = `
-            <div class="p-2.5 bg-red-950/40 border border-red-800/80 rounded-xl text-xs text-red-300">
-              Perchance Error: ${escapeHtml(err.message)}
-            </div>`;
-        }
-      } finally {
-        scrollBottom();
+            </div>
+          </div>`;
       }
+      scrollBottom();
     }
 
-    // --- 9. VISION STUDIO TAB (PERCHANCE NATIVE CANVAS) ---
-    async function runPerchanceVisionStudio() {
-      const prompt = document.getElementById('imagePrompt').value.trim();
-      if (!prompt) return alert('Please enter an image prompt first!');
-
-      const empty = document.getElementById('imageEmptyState');
-      const loading = document.getElementById('imageLoadingState');
-      const resultWrapper = document.getElementById('imageResultWrapper');
-      const img = document.getElementById('renderedImage');
-      const dl = document.getElementById('downloadImgLink');
-      const btn = document.getElementById('generateImgBtn');
-      const statusText = document.getElementById('imageStatusText');
-
-      empty.classList.add('hidden');
-      resultWrapper.classList.add('hidden');
-      loading.classList.remove('hidden');
-      btn.disabled = true;
-
-      statusText.innerText = "Perchance neural worker synthesizing image...";
-
-      try {
-        const result = await generateFromPerchance(prompt);
-        img.src = result.dataUrl;
-        dl.href = result.dataUrl;
-        
-        loading.classList.add('hidden');
-        resultWrapper.classList.remove('hidden');
-
-        // Automatically archive to Google Drive
-        backupImageToDrive(prompt, result);
-      } catch (err) {
-        loading.classList.add('hidden');
-        empty.classList.remove('hidden');
-        alert("Perchance generation notice: " + err.message);
-      } finally {
-        btn.disabled = false;
-      }
+    // --- 8. REFRESH PERCHANCE FRAME ---
+    function reloadPerchanceFrame() {
+      const frame = document.getElementById('perchanceFrame');
+      if (frame) frame.src = frame.src;
     }
 
-    // --- 10. INITIALIZATION & AUTH ---
+    // --- 9. INITIALIZATION & AUTH ---
     window.addEventListener('DOMContentLoaded', () => {
       let saved = localStorage.getItem('mjh_gateway_url');
       if (!saved) {
@@ -581,7 +416,7 @@
         ? "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white" 
         : "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition";
 
-      document.getElementById('headerTitle').innerText = isChat ? "MJH 4.0" : "Vision Studio";
+      document.getElementById('headerTitle').innerText = isChat ? "MJH 4.0" : "Perchance Vision Studio";
     }
 
     function startNewChat() {
@@ -590,7 +425,7 @@
         <div id="greetingContainer" class="flex flex-col items-center justify-center min-h-[50vh] text-center">
           <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow mb-4">M</div>
           <h2 class="text-xl font-semibold text-white mb-2">Welcome to MJH AI</h2>
-          <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Running with uncensored tensor weights on a private dedicated node.</p>
+          <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Type any message or friend slash command (/nikhil, /aditya, /img nikhil...).</p>
         </div>`;
       document.getElementById('promptInput').value = '';
     }
@@ -602,12 +437,7 @@
       }
     }
 
-    function appendStyle(styleStr) {
-      const field = document.getElementById('imagePrompt');
-      field.value = field.value ? `${field.value.trim()}, ${styleStr}` : styleStr;
-    }
-
-    // --- 11. MAIN MESSAGE SUBMIT HANDLER ---
+    // --- 10. MAIN MESSAGE SUBMIT HANDLER ---
     async function sendMessage() {
       const input = document.getElementById('promptInput');
       const text = input.value.trim();
@@ -631,10 +461,10 @@
       input.value = '';
       scrollBottom();
 
-      // CASE A: IN-CHAT IMAGE GENERATION (/img <prompt>)
+      // CASE A: IN-CHAT IMAGE COMMAND (ONLY FRIEND ASSETS)
       if (text.startsWith("/img")) {
         const query = text.replace(/^\/img\s*/i, "").trim();
-        renderInChatImage(query || "cyberpunk city");
+        handleInChatFriendImage(query);
         return;
       }
 
@@ -655,7 +485,7 @@
         }
       }
 
-      // CASE C: STANDARD TEXT INFERENCE
+      // CASE C: STANDARD NEURAL TEXT INFERENCE
       const cleanGateway = rawGateway.replace(/\/+$/, '').replace(/\/v1$/, '');
       const endpoint = `${cleanGateway}/v1/chat/completions`;
 
