@@ -40,7 +40,7 @@
         </button>
         <button onclick="switchMode('image')" id="nav-image" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition">
           <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          Vision Studio (Uncensored)
+          Vision Studio
         </button>
       </div>
 
@@ -73,21 +73,18 @@
   <!-- ================= MAIN VIEWPORT ================= -->
   <main class="flex-grow flex flex-col h-full bg-[#212121] relative overflow-hidden">
     
-    <!-- Top Model Selector Bar -->
+    <!-- Top Model Branding Bar (Clean & Static) -->
     <header class="h-12 border-b border-[#2d2d2d] flex items-center justify-between px-4 bg-[#212121]/90 backdrop-blur z-20 shrink-0">
-      <div class="flex items-center gap-3">
-        <label for="modelSelect" class="text-xs text-gray-400 font-medium">Model:</label>
-        <select id="modelSelect" onchange="changeModel(this.value)" class="bg-[#2a2a2a] text-gray-200 text-xs font-semibold py-1.5 px-3 rounded-lg border border-[#3e3e3e] focus:outline-none focus:border-emerald-500 cursor-pointer">
-          <option value="agy/gemini-3.1-flash-lite" selected>Gemini 3.1 Flash-Lite (Fastest & Cheapest)</option>
-          <option value="agy/gemini-3.7-flash-low">Gemini 3.7 Flash-Low (Balanced)</option>
-          <option value="agy/gemini-3.7-flash-high">Gemini 3.7 Flash-High (Deep Logic)</option>
-          <option value="agy/gemini-3.1-pro-low">Gemini 3.1 Pro-Low</option>
-          <option value="agy/claude-sonnet-4-6">Claude Sonnet 4.6</option>
-          <option value="agy/claude-opus-4-6-thinking">Claude Opus 4.6 Thinking</option>
-        </select>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 text-sm font-semibold text-gray-200 py-1 px-2.5 rounded-lg">
+          <span id="headerTitle">MJH 4.0</span>
+          <span class="text-[11px] bg-[#2f2f2f] text-emerald-400 font-mono px-2 py-0.5 rounded border border-[#3d3d3d] flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Dedicated Node
+          </span>
+        </div>
       </div>
       <div class="text-[11px] text-gray-400 font-mono hidden sm:flex items-center gap-2">
-        <span>Hardware Engine: Dedicated Node</span>
+        <span>High-Speed Tensor Core</span>
       </div>
     </header>
 
@@ -100,7 +97,7 @@
           <div id="greetingContainer" class="flex flex-col items-center justify-center min-h-[50vh] text-center">
             <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow mb-4">M</div>
             <h2 class="text-xl font-semibold text-white mb-2">What can I help you explore today?</h2>
-            <p class="text-xs text-gray-400 max-w-sm">Direct connection established to your private OmniRoute node. Fast, unfiltered, and local.</p>
+            <p class="text-xs text-gray-400 max-w-sm">Direct connection established to your private local host. Unfiltered, private, and stored locally.</p>
           </div>
         </div>
       </div>
@@ -132,7 +129,7 @@
 
     </div>
 
-    <!-- TAB 2: UNCENSORED PERCHANCE CANVAS (NO CONNECTION ERRORS) -->
+    <!-- TAB 2: UNCENSORED PERCHANCE CANVAS -->
     <div id="view-image" class="hidden flex-grow flex flex-col h-[calc(100vh-3rem)]">
       <iframe 
         id="perchanceFrame" 
@@ -172,14 +169,15 @@
 
   <!-- ================= SCRIPT ================= -->
   <script>
+    // HARDCODED CHEAPEST & FASTEST ENGINE (Protects your quota)
+    const LOCKED_MODEL = "agy/gemini-3.1-flash-lite";
+
     let activeMode = 'chat';
     let conversationHistory = [];
 
     window.addEventListener('DOMContentLoaded', () => {
       const saved = localStorage.getItem('mjh_gateway_url') || '';
       document.getElementById('gatewayUrl').value = saved;
-      const savedModel = localStorage.getItem('mjh_selected_model') || 'agy/gemini-3.1-flash-lite';
-      document.getElementById('modelSelect').value = savedModel;
       updateStatusDisplay();
     });
 
@@ -188,15 +186,11 @@
 
     function saveGatewayUrl() {
       let url = document.getElementById('gatewayUrl').value.trim();
-      // Clean duplicate /v1 and trailing slashes
+      // Auto-strip trailing slashes and redundant /v1
       url = url.replace(/\/+$/, '').replace(/\/v1$/, '');
       localStorage.setItem('mjh_gateway_url', url);
       updateStatusDisplay();
       closeSettingsModal();
-    }
-
-    function changeModel(val) {
-      localStorage.setItem('mjh_selected_model', val);
     }
 
     function updateStatusDisplay() {
@@ -224,6 +218,8 @@
       document.getElementById('nav-image').className = !isChat 
         ? "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white" 
         : "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition";
+
+      document.getElementById('headerTitle').innerText = isChat ? "MJH 4.0" : "Vision Studio";
     }
 
     function startNewChat() {
@@ -232,7 +228,7 @@
         <div id="greetingContainer" class="flex flex-col items-center justify-center min-h-[50vh] text-center">
           <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow mb-4">M</div>
           <h2 class="text-xl font-semibold text-white mb-2">What can I help you explore today?</h2>
-          <p class="text-xs text-gray-400 max-w-sm">Direct connection established to your private OmniRoute node. Fast, unfiltered, and local.</p>
+          <p class="text-xs text-gray-400 max-w-sm">Direct connection established to your private local host. Unfiltered, private, and stored locally.</p>
         </div>`;
       document.getElementById('promptInput').value = '';
     }
@@ -251,7 +247,6 @@
       const chatBox = document.getElementById('chatMessages');
       const greeting = document.getElementById('greetingContainer');
       const rawGateway = localStorage.getItem('mjh_gateway_url');
-      const currentModel = document.getElementById('modelSelect').value;
 
       if (!text) return;
       if (!rawGateway) {
@@ -261,7 +256,7 @@
 
       if (greeting) greeting.remove();
 
-      // Ensure clean /v1 endpoint
+      // Clean /v1 endpoint
       const cleanGateway = rawGateway.replace(/\/+$/, '').replace(/\/v1$/, '');
       const endpoint = `${cleanGateway}/v1/chat/completions`;
 
@@ -287,7 +282,7 @@
       sendBtn.disabled = true;
       scrollBottom();
 
-      // Append to context memory
+      // Append user text to conversational context
       conversationHistory.push({ role: 'user', content: text });
 
       try {
@@ -298,7 +293,7 @@
             'Authorization': 'Bearer sk-omniroute'
           },
           body: JSON.stringify({
-            model: currentModel,
+            model: LOCKED_MODEL,
             messages: conversationHistory,
             stream: false
           })
@@ -312,7 +307,7 @@
         const data = await response.json();
         const reply = data.choices[0].message.content;
 
-        // Save assistant reply to memory
+        // Remember assistant response
         conversationHistory.push({ role: 'assistant', content: reply });
 
         document.getElementById(assistantId).innerHTML = `<div class="whitespace-pre-wrap">${escapeHtml(reply)}</div>`;
