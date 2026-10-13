@@ -34,7 +34,7 @@
       
       <button 
         onclick="verifyPasscode()" 
-        class="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold py-2 rounded-xl text-xs text-white transition">
+        class="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold py-2 rounded-xl text-xs text-white transition cursor-pointer">
         Unlock Studio
       </button>
       <p id="authErrorMsg" class="text-[11px] text-red-400 mt-2.5 hidden">Incorrect passcode</p>
@@ -47,7 +47,7 @@
       
       <!-- New Chat Button -->
       <div class="flex items-center justify-between mb-3 px-1">
-        <button onclick="startNewChat()" class="flex items-center justify-between flex-grow bg-transparent hover:bg-[#212121] text-[#ececec] text-sm font-medium py-2 px-3 rounded-lg border border-[#383838] hover:border-[#4f4f4f] transition">
+        <button onclick="startNewChat()" class="flex items-center justify-between flex-grow bg-transparent hover:bg-[#212121] text-[#ececec] text-sm font-medium py-2 px-3 rounded-lg border border-[#383838] hover:border-[#4f4f4f] transition cursor-pointer">
           <span class="flex items-center gap-2">
             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             New chat
@@ -57,22 +57,29 @@
 
       <!-- Navigation Tabs -->
       <div class="space-y-1 mb-4">
-        <button onclick="switchMode('chat')" id="nav-chat" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white">
+        <button onclick="switchMode('chat')" id="nav-chat" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white cursor-pointer">
           <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
           MJH 4.0 Core
         </button>
-        <button onclick="switchMode('image')" id="nav-image" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition">
+        <button onclick="switchMode('image')" id="nav-image" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition cursor-pointer">
           <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
           Perchance Studio
         </button>
       </div>
 
-      <div class="text-[11px] font-semibold tracking-wider text-gray-500 uppercase px-2 mb-2">Friend Shortcuts</div>
-      <div class="px-2 py-1 text-xs text-gray-400 space-y-1">
-        <div>/nikhil &bull; /aditya &bull; /akansh</div>
-        <div>/nilu &bull; /ekagra &bull; /anahad &bull; /aksh
-ay</div>
-        <div class="text-[10px] text-gray-500 pt-1">Photos: <code>/img name</code></div>
+      <!-- Quick Commands Legend -->
+      <div class="text-[11px] font-semibold tracking-wider text-gray-500 uppercase px-2 mb-1.5">Friend Shortcuts</div>
+      <div class="px-2 py-2 rounded-xl bg-[#1e1e1e]/60 border border-[#2a2a2a] text-xs text-gray-400 space-y-1 font-mono">
+        <div>/nikhil &bull; /aditya</div>
+        <div>/akansh &bull; /nilu</div>
+        <div>/ekagra &bull; /anahad</div>
+        <div>/akshay</div>
+        <div class="text-[11px] text-indigo-300 pt-1 font-sans">Photos: <code>/img [name]</code></div>
+      </div>
+
+      <div class="text-[11px] font-semibold tracking-wider text-gray-500 uppercase px-2 mt-4 mb-2">Recent Sessions</div>
+      <div id="sessionHistory" class="flex-grow overflow-y-auto space-y-1 text-sm text-gray-300">
+        <div class="px-3 py-2 rounded-lg text-xs text-gray-500 italic">No previous chats yet</div>
       </div>
 
       <!-- Settings / Cluster Status -->
@@ -123,7 +130,7 @@ ay</div>
           <div id="greetingContainer" class="flex flex-col items-center justify-center min-h-[50vh] text-center">
             <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow mb-4">M</div>
             <h2 class="text-xl font-semibold text-white mb-2">Welcome to MJH AI</h2>
-            <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Type any message or friend slash command (/nikhil, /aditya, /img nikhil...).</p>
+            <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Chat freely, trigger friend commands (/nikhil, /ekagra), or display friend photos (/img nikhil).</p>
           </div>
         </div>
       </div>
@@ -143,7 +150,7 @@ ay</div>
             <button 
               id="sendBtn" 
               onclick="sendMessage()"
-              class="absolute right-2.5 bottom-2 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition disabled:opacity-40 disabled:hover:bg-white">
+              class="absolute right-2.5 bottom-2 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition disabled:opacity-40 disabled:hover:bg-white cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
             </button>
           </div>
@@ -155,32 +162,39 @@ ay</div>
 
     </div>
 
-    <!-- TAB 2: EMBEDDED DIRECT PERCHANCE PORTAL -->
-    <div id="view-image" class="hidden flex-grow flex flex-col h-[calc(100vh-3rem)] overflow-hidden bg-[#181818]">
-      
-      <!-- Studio Control Bar -->
-      <div class="h-10 border-b border-[#2d2d2d] bg-[#1e1e1e] flex items-center justify-between px-4 shrink-0">
-        <div class="flex items-center gap-2 text-xs text-gray-300">
-          <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-          <span class="font-semibold">Perchance Engine (Direct Portal)</span>
+    <!-- TAB 2: PERCHANCE STUDIO PORTAL (CSP-BYPASS APP WINDOW) -->
+    <div id="view-image" class="hidden flex-grow flex flex-col h-[calc(100vh-3rem)] overflow-y-auto bg-[#181818] p-4 sm:p-8">
+      <div class="max-w-2xl mx-auto w-full flex flex-col items-center justify-center my-auto text-center">
+        
+        <div class="w-16 h-16 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-400 flex items-center justify-center text-3xl mb-4 shadow-xl">
+          🎨
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="reloadPerchanceFrame()" class="text-xs bg-[#2c2c2c] hover:bg-[#3a3a3a] text-gray-300 px-2.5 py-1 rounded border border-[#3e3e3e] transition">
-            ⟳ Reload Studio
+
+        <h2 class="text-2xl font-bold text-white mb-2">MJH Vision Studio</h2>
+        <p class="text-xs text-gray-400 max-w-md mb-6 leading-relaxed">
+          Powered directly by Perchance's unrestricted diffusion GPU engine. Generates directly in a detached, clean studio window with zero iframe blocks, zero token consumption, and zero login requirements.
+        </p>
+
+        <!-- Studio Launcher Card -->
+        <div class="w-full bg-[#242424] border border-[#383838] rounded-2xl p-6 shadow-2xl flex flex-col items-center gap-4">
+          <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Perchance GPU Cluster Online &middot; Unlimited Generations
+          </div>
+
+          <button 
+            onclick="openPerchanceStudioWindow()" 
+            class="w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+            <span>Launch Perchance Studio Window</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
           </button>
+
+          <p class="text-[11px] text-gray-500">
+            Bypasses browser CSP frame-ancestors restrictions completely.
+          </p>
         </div>
-      </div>
 
-      <!-- Native null.perchance.org Frame (Bypasses SAMEORIGIN & CSP) -->
-      <div class="flex-grow w-full h-full relative bg-[#181818]">
-        <iframe 
-          id="perchanceFrame"
-          src="https://null.perchance.org/ai-text-to-image-generator" 
-          class="w-full h-full border-none"
-          allow="clipboard-write; fullscreen">
-        </iframe>
       </div>
-
     </div>
 
   </main>
@@ -190,7 +204,7 @@ ay</div>
     <div class="bg-[#242424] border border-[#3b3b3b] rounded-2xl w-full max-w-md p-6 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-base font-semibold text-white">Dedicated Node Gateway</h3>
-        <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white">✕</button>
+        <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white cursor-pointer">✕</button>
       </div>
       
       <p class="text-xs text-gray-400 mb-4">
@@ -205,8 +219,8 @@ ay</div>
         class="w-full bg-[#1a1a1a] border border-[#3d3d3d] rounded-lg p-2.5 text-sm text-gray-200 focus:outline-none focus:border-emerald-500 font-mono mb-5">
 
       <div class="flex justify-end gap-2">
-        <button onclick="closeSettingsModal()" class="px-4 py-2 text-xs font-semibold rounded-lg text-gray-400 hover:text-white hover:bg-[#303030]">Cancel</button>
-        <button onclick="saveGatewayUrl()" class="px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition">Save & Connect</button>
+        <button onclick="closeSettingsModal()" class="px-4 py-2 text-xs font-semibold rounded-lg text-gray-400 hover:text-white hover:bg-[#303030] cursor-pointer">Cancel</button>
+        <button onclick="saveGatewayUrl()" class="px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition cursor-pointer">Save & Connect</button>
       </div>
     </div>
   </div>
@@ -217,14 +231,14 @@ ay</div>
     const LOCKED_MODEL = "agy/gemini-3.1-flash-lite";
     const DEFAULT_PERMANENT_TUNNEL = "https://crystal-unnamable-untoasted.ngrok-free.dev";
     
-    // --- 2. CONFIGURATION: PASSCODE & GDRIVE WEBHOOK ---
+    // --- 2. SECURITY & DRIVE WEBHOOK ---
     const ACCESS_PASSCODE = "mjh2026";
     const GDRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby6T4RNpzoqUOVJmzYuZ1n8Pvt32_fZ_VhWeFcaoZvN-1Gw_04naGlqdqfM3ikwxdVveA/exec";
 
     let activeMode = 'chat';
     let conversationHistory = [];
 
-    // --- 3. CUSTOM COMMAND REGISTRY (7 FRIENDS) ---
+    // --- 3. CUSTOM COMMAND REGISTRY (7 FRIENDS + ALIASES) ---
     const REGISTERED_COMMANDS = {
             "nikhil": "Oh my god, you're again talking about coal miners. I don't like them. And again, Bala photocopy, there is no need for them.",
       "aditya": "Oh my god, stop talking about Michael Jordan HENTAI!",
@@ -303,7 +317,7 @@ ay</div>
       const chatBox = document.getElementById('chatMessages');
       const clean = query.toLowerCase().trim();
       
-      // Match friend name (with typo tolerance)
+      // Check if query matches a friend (with typo tolerance)
       let matchedName = clean;
       let matchedPhoto = FRIEND_PHOTOS[clean];
 
@@ -331,16 +345,16 @@ ay</div>
               </div>
             </div>
           </div>`;
-        backupChatToDrive(`/img ${query}`, `[Stored Photo Displayed: ${matchedName}]`);
+        backupChatToDrive(`/img ${query}`, `[Stored Photo: ${matchedName}]`);
       } else {
-        // Case B: User typed a random prompt into chat
+        // Case B: Not a registered friend (advises using Vision Studio)
         chatBox.innerHTML += `
           <div class="flex gap-4 items-start">
             <div class="w-7 h-7 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs shrink-0 mt-0.5 shadow">ℹ️</div>
             <div class="text-sm text-gray-200 leading-relaxed max-w-[88%] pt-0.5">
               <div class="bg-[#2a2a2a] p-3 rounded-2xl border border-amber-800/60 text-xs text-amber-200 space-y-1">
-                <p><b>Notice:</b> In-chat <code>/img</code> only displays stored friend photos (e.g. <code>/img nikhil</code>, <code>/img aditya</code>, <code>/img ekagra</code>).</p>
-                <p class="text-gray-400">To generate any custom AI artwork, click <b>Perchance Studio</b> in the sidebar!</p>
+                <p><b>Notice:</b> In-chat <code>/img</code> is reserved for stored friend photos (e.g. <code>/img nikhil</code>, <code>/img aditya</code>, <code>/img ekagra</code>).</p>
+                <p class="text-gray-400">To generate custom AI artwork, click <b>Perchance Studio</b> in the sidebar!</p>
               </div>
             </div>
           </div>`;
@@ -348,10 +362,22 @@ ay</div>
       scrollBottom();
     }
 
-    // --- 8. REFRESH PERCHANCE FRAME ---
-    function reloadPerchanceFrame() {
-      const frame = document.getElementById('perchanceFrame');
-      if (frame) frame.src = frame.src;
+    // --- 8. PERCHANCE STUDIO WINDOW LAUNCHER (CSP BYPASS) ---
+    function openPerchanceStudioWindow() {
+      const width = Math.min(1020, window.screen.availWidth - 80);
+      const height = Math.min(880, window.screen.availHeight - 80);
+      const left = Math.max(0, (window.screen.availWidth - width) / 2);
+      const top = Math.max(0, (window.screen.availHeight - height) / 2);
+
+      const features = `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes`;
+      
+      const studioWin = window.open('https://perchance.org/ai-text-to-image-generator', 'MJH_Perchance_Studio', features);
+      
+      if (studioWin) {
+        studioWin.focus();
+      } else {
+        alert("Pop-up blocked! Please allow pop-ups for this site to open Perchance Studio.");
+      }
     }
 
     // --- 9. INITIALIZATION & AUTH ---
@@ -409,12 +435,12 @@ ay</div>
       document.getElementById('view-image').classList.toggle('hidden', isChat);
 
       document.getElementById('nav-chat').className = isChat 
-        ? "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white" 
-        : "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition";
+        ? "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white cursor-pointer" 
+        : "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition cursor-pointer";
 
       document.getElementById('nav-image').className = !isChat 
-        ? "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white" 
-        : "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition";
+        ? "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg bg-[#212121] text-white cursor-pointer" 
+        : "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-gray-400 hover:text-white hover:bg-[#212121] transition cursor-pointer";
 
       document.getElementById('headerTitle').innerText = isChat ? "MJH 4.0" : "Perchance Vision Studio";
     }
@@ -425,7 +451,7 @@ ay</div>
         <div id="greetingContainer" class="flex flex-col items-center justify-center min-h-[50vh] text-center">
           <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow mb-4">M</div>
           <h2 class="text-xl font-semibold text-white mb-2">Welcome to MJH AI</h2>
-          <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Type any message or friend slash command (/nikhil, /aditya, /img nikhil...).</p>
+          <p class="text-xs text-gray-400 max-w-sm">Engineered by Nilotpal. Chat freely, trigger friend commands (/nikhil, /ekagra), or display friend photos (/img nikhil).</p>
         </div>`;
       document.getElementById('promptInput').value = '';
     }
@@ -461,7 +487,7 @@ ay</div>
       input.value = '';
       scrollBottom();
 
-      // CASE A: IN-CHAT IMAGE COMMAND (ONLY FRIEND ASSETS)
+      // CASE A: IN-CHAT IMAGE COMMAND (/img <friend>)
       if (text.startsWith("/img")) {
         const query = text.replace(/^\/img\s*/i, "").trim();
         handleInChatFriendImage(query);
@@ -535,6 +561,7 @@ ay</div>
         const data = await response.json();
         let reply = data.choices[0].message.content;
 
+        // Identity Sanitizer
         reply = reply
           .replace(/Antigravity/gi, "MJH AI")
           .replace(/Google Deep[mM]ind team|Google Deep[mM]ind|Google Deep Mind/gi, "Nilotpal")
